@@ -1,0 +1,79 @@
+
+FUNCTION_BLOCK sentiment	// Block definition (there may be more than one block per file)
+
+VAR_INPUT				// Define input variables
+	reputacao_autor : REAL;
+	padroes : REAL;                 
+        corretude: REAL;
+END_VAR
+
+VAR_OUTPUT				// Define output variable
+	importancia : REAL;
+END_VAR
+
+FUZZIFY reputacao_autor		// Fuzzify input variable 'reputacao_autor': {'baixa', 'media' , 'alta'}
+        TERM baixa := (0, 1) (0.3, 0) ; 
+        TERM media := (0.2, 0) (0.4,1) (0.6,1) (0.8,0);
+	TERM alta := (0.7, 0) (1, 1);
+END_FUZZIFY
+
+FUZZIFY padroes			// Fuzzify input variable 'padroes': { 'baixo','medio','alto' }
+	TERM baixo := (0, 1) (1,1) (2.5, 0) ;
+	TERM medio := (0.5,0) (2.1,1) (3.5,1) (4,0) ;
+        TERM alto :=  (2.5,0) (4,1) (6,1);
+END_FUZZIFY
+
+FUZZIFY corretude			// Fuzzify input variable 'corretude': { 'baixo','medio','alto' }
+	TERM baixo := (0, 1) (40, 1) (70,0) ;
+	TERM medio := (40,0) (60,1) (80,1) (90,0) ;
+        TERM alto :=  (70,0) (95,1) (100,1);
+END_FUZZIFY
+
+        
+
+DEFUZZIFY importancia			// Defuzzify output variable 'importancia' : {'insuficiente', 'suficiente', 'boa','plena' }
+         TERM insuficiente := (1,1) (3,1) (4,0);
+         TERM suficiente := (4,0) (5,1) (6,0);
+         TERM boa := (6,0) (7,1) (8,0);
+         TERM plena := (8,0) (9,1) (10,1);
+	
+	METHOD : COG;		// Use 'Center Of Gravity' defuzzification method
+	DEFAULT := 0;		// Default value is 0 (if no rule activates defuzzifier)
+END_DEFUZZIFY
+
+RULEBLOCK No1
+	AND : MIN;			// Use 'min' for 'and' (also implicit use 'max' for 'or' to fulfill DeMorgan's Law)
+	ACT : MIN;			// Use 'min' activation method
+	ACCU : MAX;			// Use 'max' accumulation method
+
+      RULE 1 : IF reputacao_autor IS baixa AND padroes IS baixo AND corretude IS baixo THEN importancia IS insuficiente;
+      RULE 2 : IF reputacao_autor IS baixa AND padroes IS baixo AND corretude IS medio THEN importancia IS insuficiente;
+      RULE 3 : IF reputacao_autor IS baixa AND padroes IS baixo AND corretude IS alto THEN importancia IS suficiente;
+      RULE 4 : IF reputacao_autor IS baixa AND padroes IS medio AND corretude IS baixo THEN importancia IS suficiente;
+      RULE 5 : IF reputacao_autor IS baixa AND padroes IS medio AND corretude IS medio THEN importancia IS suficiente;
+      RULE 6 : IF reputacao_autor IS baixa AND padroes IS medio AND corretude IS alto THEN importancia IS suficiente;
+      RULE 7 : IF reputacao_autor IS baixa AND padroes IS alto AND corretude IS baixo THEN importancia IS suficiente;
+      RULE 8 : IF reputacao_autor IS baixa AND padroes IS alto AND corretude IS medio THEN importancia IS boa;
+      RULE 9 : IF reputacao_autor IS baixa AND padroes IS alto AND corretude IS alto THEN importancia IS plena;
+      RULE 10 : IF reputacao_autor IS media AND padroes IS baixo AND corretude IS baixo THEN importancia IS insuficiente;
+      RULE 11 : IF reputacao_autor IS media AND padroes IS baixo AND corretude IS medio THEN importancia IS insuficiente;
+      RULE 12 : IF reputacao_autor IS media AND padroes IS baixo AND corretude IS alto THEN importancia IS suficiente;
+      RULE 13 : IF reputacao_autor IS media AND padroes IS medio AND corretude IS baixo THEN importancia IS suficiente;
+      RULE 14 : IF reputacao_autor IS media AND padroes IS medio AND corretude IS medio THEN importancia IS suficiente;
+      RULE 15 : IF reputacao_autor IS media AND padroes IS medio AND corretude IS alto THEN importancia IS boa;
+      RULE 16 : IF reputacao_autor IS media AND padroes IS alto AND corretude IS baixo THEN importancia IS boa;
+      RULE 17 : IF reputacao_autor IS media AND padroes IS alto AND corretude IS medio THEN importancia IS plena;
+      RULE 18 : IF reputacao_autor IS media AND padroes IS alto AND corretude IS alto THEN importancia IS plena;
+      RULE 19 : IF reputacao_autor IS alta AND padroes IS baixo AND corretude IS baixo THEN importancia IS insuficiente;
+      RULE 20 : IF reputacao_autor IS alta AND padroes IS baixo AND corretude IS medio THEN importancia IS suficiente;
+      RULE 21 : IF reputacao_autor IS alta AND padroes IS baixo AND corretude IS alto THEN importancia IS suficiente;
+      RULE 22 : IF reputacao_autor IS alta AND padroes IS medio AND corretude IS baixo THEN importancia IS suficiente;
+      RULE 23 : IF reputacao_autor IS alta AND padroes IS medio AND corretude IS medio THEN importancia IS boa;
+      RULE 24 : IF reputacao_autor IS alta AND padroes IS medio AND corretude IS alto THEN importancia IS boa;
+      RULE 25 : IF reputacao_autor IS alta AND padroes IS alto AND corretude IS baixo THEN importancia IS boa;
+      RULE 26 : IF reputacao_autor IS alta AND padroes IS alto AND corretude IS medio THEN importancia IS plena;
+      RULE 27 : IF reputacao_autor IS alta AND padroes IS alto AND corretude IS alto THEN importancia IS plena;
+END_RULEBLOCK
+
+END_FUNCTION_BLOCK
+

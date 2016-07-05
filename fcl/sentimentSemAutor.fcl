@@ -1,0 +1,52 @@
+FUNCTION_BLOCK sentiment	// Block definition (there may be more than one block per file)
+
+VAR_INPUT				// Define input variables
+	padroes : REAL;                 // sugestão: Média quant_padroes/tamanho_comment
+        corretude: REAL;
+END_VAR
+
+VAR_OUTPUT				// Define output variable
+	importancia : REAL;
+END_VAR
+
+FUZZIFY padroes			// Fuzzify input variable 'padroes': { 'baixo','medio','alto' }
+	TERM baixo := (0, 1) (10, 1) (20,0) ;
+	TERM medio := (15,0) (25,1) (30,1) (45,0) ;
+        TERM alto :=  (40,0) (50,1);
+END_FUZZIFY
+
+FUZZIFY corretude			// Fuzzify input variable 'corretude': { 'baixo','medio','alto' }
+	TERM baixo := (0, 1) (30, 1) (45,0) ;
+	TERM medio := (35,0) (50,1) (70,1) (80,0) ;
+        TERM alto :=  (75,0) (80,1) (100,1);
+END_FUZZIFY
+
+DEFUZZIFY importancia			// Defuzzify output variable 'importancia' : {'muito_baixa', 'baixa', 'media','alta','muito_alta' }
+	TERM muito_baixa := (0,0) (3,1) (5,0);
+        TERM baixa := (5,0) (8,1) (13,0);
+	TERM media := (13,0) (17,1) (22,0);
+	TERM alta := (22,0) (27,1) (31,0);
+        TERM muito_alta := (31,0) (35,1);
+	
+	METHOD : COG;		// Use 'Center Of Gravity' defuzzification method
+	DEFAULT := 0;		// Default value is 0 (if no rule activates defuzzifier)
+END_DEFUZZIFY
+
+RULEBLOCK No1
+	AND : MIN;			// Use 'min' for 'and' (also implicit use 'max' for 'or' to fulfill DeMorgan's Law)
+	ACT : MIN;			// Use 'min' activation method
+	ACCU : MAX;			// Use 'max' accumulation method
+
+        RULE 1 : IF padroes IS baixo AND corretude IS baixo THEN importancia IS muito_baixa;
+        RULE 2 : IF padroes IS baixo AND corretude IS medio THEN importancia IS baixa;
+        RULE 3 : IF padroes IS baixo AND corretude IS alto THEN importancia IS baixa;
+        RULE 4 : IF padroes IS medio AND corretude IS baixo THEN importancia IS baixa;
+        RULE 5 : IF padroes IS medio AND corretude IS medio THEN importancia IS media;
+	RULE 6 : IF padroes IS medio AND corretude IS alto THEN importancia IS media;
+	RULE 7 : IF padroes IS alto AND corretude IS baixo THEN importancia IS alta;
+	RULE 8 : IF padroes IS alto AND corretude IS medio THEN importancia IS alta;
+	RULE 9 : IF padroes IS alto AND corretude IS alto THEN importancia IS alta;
+END_RULEBLOCK
+
+END_FUNCTION_BLOCK
+
