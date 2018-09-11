@@ -2,13 +2,6 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="1"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/C:/Users/Rogério/Dropbox/Federal/MESTRADO/Projeto/workspace/ProjetoFinal/src/gramaticas/sintagmatica/TreeTaggerMain.java</file>
-            <file>file:/C:/Users/Rogério/Dropbox/Federal/MESTRADO/Projeto/workspace/ProjetoFinal/src/core/model/Review.java</file>
-            <file>file:/C:/Users/Rogério/Dropbox/Federal/MESTRADO/Projeto/workspace/ProjetoFinal/src/util/banco/ConexaoSentiLex.java</file>
-            <file>file:/C:/Users/Rogério/Dropbox/Federal/MESTRADO/Projeto/workspace/ProjetoFinal/src/util/banco/GravaSentiLex.java</file>
-            <file>file:/C:/Users/Rogério/Dropbox/Federal/MESTRADO/Projeto/workspace/ProjetoFinal/src/core/fuzzy/CalculaImportancia.java</file>
-            <file>file:/C:/Users/Rogério/Dropbox/Federal/MESTRADO/Projeto/workspace/ProjetoFinal/src/util/etiquetador/treeTagger/Etiquetador.java</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>
