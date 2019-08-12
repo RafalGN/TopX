@@ -14,11 +14,13 @@ import extracao.corretude.CorretudeCalculator;
 import extracao.reputacao.AuthorReputation;
 import gramaticas.padroes.PadroesTreeTagger;
 import gramaticas.sintagmatica.GramaticaSintagmaticaTreeTagger;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 import util.arquivos.UtilsArquivo;
 import util.banco.GravaCorpusBuscape;
 
@@ -29,14 +31,20 @@ import util.banco.GravaCorpusBuscape;
 public class Main {
 
     public static void main(String[] args) throws FileNotFoundException, Exception {
-        DetectaPolaridade detecPol = new DetectaPolaridade();
-        
+        //  DetectaPolaridade detecPol = new DetectaPolaridade();
+
 //        List<Review> corpusBuscapePuro = GravaReviews.selectReviews();
-        List<Review> corpusBuscapeRevisado = new ArrayList<>();
-        corpusBuscapeRevisado.addAll(GravaCorpusBuscape.selectPositivos());
-        corpusBuscapeRevisado.addAll(GravaCorpusBuscape.selectNegativos());
-        corpusBuscapeRevisado.addAll(GravaCorpusBuscape.selectPositivosNegativos());
-        
+//        List<Review> corpusBuscapeRevisado = new ArrayList<>();
+//        corpusBuscapeRevisado.addAll(GravaCorpusBuscape.selectPositivos());
+//        corpusBuscapeRevisado.addAll(GravaCorpusBuscape.selectNegativos());
+//        corpusBuscapeRevisado.addAll(GravaCorpusBuscape.selectPositivosNegativos());
+
+//        File folder = new File("recursos/corpus/");
+      //  Criar arquivos
+//        for (Review rev: corpusBuscapeRevisado){
+//            UtilsArquivo.salva("recursos/corpus/" + rev.getId() +".txt", rev.getComentario());
+//        }
+//        System.out.println("pause!!");
         /*
          * Inicio
          */
@@ -44,51 +52,64 @@ public class Main {
         /*
          * Fim
          */
-
 //        System.out.println("Polarização Puro: ");
 //        detecPol.executaAvalLexico(corpusBuscapePuro);
-        
 //        calculaImportancia(corpusBuscapePuro);
-        calculaImportancia(corpusBuscapeRevisado);
+//        calculaImportancia(corpusBuscapeRevisado);
+    
+        Scanner sc = new Scanner(new File("reviews/saida.txt"), "UTF-8");
+        List<Review> corpusApp = new ArrayList<Review>();
+        while (sc.hasNextLine()){
+            String linha = sc.nextLine();
+            String[] str_linha = linha.split("\t");
+            Review rev = new Review(str_linha[0].trim(), str_linha[1].trim());
+            corpusApp.add(rev);
+        }
+        calculaImportancia(corpusApp);
 
 //        System.out.println("Polarização Buscapé Revisado: ");
 //        detecPol.executaAvalLexicoNovo(corpusBuscapeRevisado);
-        detecPol.executaAvalLexico(corpusBuscapeRevisado);
-        
+        //    detecPol.executaAvalLexico(corpusBuscapeRevisado);
 //        String corpusBPuroString = "";
-        String corpusBRevisadoString = "";
-        
-        for(Review r : corpusBuscapeRevisado){
-            corpusBRevisadoString = corpusBRevisadoString + r;
+//        String corpusBRevisadoString = "";
+        String corpusAppOut = "";
+
+//        for (Review r : corpusBuscapeRevisado) {
+//            corpusBRevisadoString = corpusBRevisadoString + r;
+//        }
+        for (Review r : corpusApp) {
+            corpusAppOut = corpusAppOut + r.getPostsAutor() + "," + r.getPadroes().size() + "," + r.getPercentCorretude()
+                + "," + r.getImportancia() +","+ r.getAvaliacao_conceitual_manual() + "," + r.getClasseManual() + "\n";
         }
-        
+
 //        for(Review r : corpusBuscapeRevisado){
 //            corpusBRevisadoString = corpusBRevisadoString + r.getId() + "\t" +
 //                    r.getAvaliacao_conceitual() + "\t" +
 //                    r.getAvaliacao_conceitual_manual() +"\n";
 ////            corpusBRevisadoString = corpusBRevisadoString + r;
 //        }
-        
 //        UtilsArquivo.salva("corpusBuscapePuro.txt", corpusBPuroString);
-        UtilsArquivo.salva("corpusBuscapeRevisado.txt", corpusBRevisadoString);
+//        UtilsArquivo.salva("corpusBuscapeRevisado.txt", corpusBRevisadoString);
+//        UtilsArquivo.salva("corpusImportanciaResultado.txt", corpusBRevisadoString);
+        UtilsArquivo.salva("corpusImportanciaResultadoApp.txt", corpusAppOut);
         //calcular P, R, F
 //        ReviewImportanceComparator ric = new ReviewImportanceComparator();
-        
-//        Collections.sort(corpusBuscapePuro,ric);
 
-        
+//        Collections.sort(corpusBuscapePuro,ric);
         System.out.println("Terminei");
     }
-    
+
     /**
-     * TODO: - Calcular a acuracia geral: Corretos/total
-     *       - Calcular a acuracia dos Positivos: Acertos Positivos/Positivos Total
-     *       - Calcular a acurácia dos Negativos: Acertos Negativos/Negativos Total
-     * @param reviews 
+     * TODO: - Calcular a acuracia geral: Corretos/total - Calcular a acuracia
+     * dos Positivos: Acertos Positivos/Positivos Total - Calcular a acurácia
+     * dos Negativos: Acertos Negativos/Negativos Total
+     *
+     * @param reviews
      */
-    public static void calcAcuracia(List<Review> reviews){
-        
+    public static void calcAcuracia(List<Review> reviews) {
+
     }
+
     /* 
      * Ler comentários 
      * Extrair padrões ok
@@ -141,17 +162,17 @@ public class Main {
         CorretudeCalculator cc = new CorretudeCalculator();
         CalculaImportancia ci = new CalculaImportancia();
         AuthorReputation ar = new AuthorReputation();
-        
+
         List<String> features = carregaFeatures();
-        
+
         for (Review review : reviews) {
-          //  System.out.println(review.getId());
+            //  System.out.println(review.getId());
             String texto = review.getComentario();
 //            String texto = "";
             HashMap<String, String> pares = gstt.extraiPares(texto);
             HashMap<String, String> padroes = ptt.extraiPadroes(texto);
 
-            List<String> listPadroes = extrator.contagemPadroesNovo(new ArrayList(pares.keySet()),pares ,new ArrayList(padroes.keySet()),padroes, features);
+            List<String> listPadroes = extrator.contagemPadroesNovo(new ArrayList(pares.keySet()), pares, new ArrayList(padroes.keySet()), padroes, features);
             review.setPadroes(listPadroes);
             int quantPadroes = listPadroes.size();
             double corretude = cc.calculaCorretude(texto);
@@ -159,7 +180,7 @@ public class Main {
 
             InputFuzzy ipf = new InputFuzzy(autor, quantPadroes, corretude);
             Map<Double, String> resultado = ci.executa(ipf, false);
-            
+
             review.setPercentCorretude(corretude);
             review.setPostsAutor(autor);
             review.setImportancia((double) (new ArrayList(resultado.keySet())).get(0));

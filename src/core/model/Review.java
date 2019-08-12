@@ -17,6 +17,7 @@ public class Review {
     private String autor;
     private String dominio;
     private int avaliacaoManual;
+    private String classeManual;
     private double estrelas;
     private String produto;
     private int utilUp;
@@ -73,6 +74,14 @@ public class Review {
         this.avaliacao_conceitual_manual = avaliacao_conceitual_manual;
     }
     
+    public String getClasseManual() {
+        return this.classeManual;
+    }
+
+    public void setNeg(String classeManual) {
+        this.classeManual = classeManual;
+    }
+    
     public Review() {
         this.padroes = new ArrayList<>();
         
@@ -82,6 +91,12 @@ public class Review {
         this.padroes = new ArrayList<>();
         this.comentario = comentario;
         this.avaliacaoManual = avaliacaoManual;
+    }
+    
+    public Review(String comentario, String classeManual) {
+        this.padroes = new ArrayList<>();
+        this.comentario = comentario;
+        this.classeManual = classeManual;
     }
 
     public Review(int id, String comentario, int avaliacaoManual) {
@@ -253,8 +268,8 @@ public class Review {
     @Override
     public String toString() {
         //return id + "\t" + avaliacaoManual + "\t" + avaliacaoAutomatica + "\t" + importancia +"\n";
-        return id + "\t" + this.postsAutor + "\t" + this.getPadroes().size() + "\t" + this.getPercentCorretude()
-                + "\t" + importancia +"\n" + this.getImportancia();
+        return this.id + "," + this.postsAutor + "," + this.getPadroes().size() + "," + this.getPercentCorretude()
+                + "," + this.avaliacao_conceitual_manual +"\n";
     }
 
     public int getPostsAutor() {

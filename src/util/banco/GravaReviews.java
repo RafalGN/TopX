@@ -63,7 +63,7 @@ public class GravaReviews {
 
         PreparedStatement ps;
         try {
-            ps = connection.prepareStatement("SELECT id, comentario, autor, avaliacao_conceitual FROM reviews where avaliacao_conceitual in ('PL','BM','SF','IF')");
+            ps = connection.prepareStatement("SELECT id, comentario, autor, avaliacao_conceitual FROM reviews where avaliacao_conceitual is not null");
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 Review r = new Review();

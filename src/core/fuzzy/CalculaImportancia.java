@@ -44,11 +44,11 @@ public class CalculaImportancia {
         }
 
         // Print ruleSet
-        if (fb.getVariable("importance").getValue() >= 0 && fb.getVariable("importance").getValue() <= 2) {
+        if (fb.getVariable("importance").getValue() >= 0 && fb.getVariable("importance").getValue() <= 4) {
             aval = "IF";
-        } else if (fb.getVariable("importance").getValue() > 2 && fb.getVariable("importance").getValue() <= 4) {
+        } else if (fb.getVariable("importance").getValue() > 4 && fb.getVariable("importance").getValue() <= 6) {
             aval = "SF";
-        } else if (fb.getVariable("importance").getValue() > 4 && fb.getVariable("importance").getValue() <= 7) {
+        } else if (fb.getVariable("importance").getValue() > 6 && fb.getVariable("importance").getValue() <= 8) {
             aval = "BM";
         } else {
             aval = "PL";

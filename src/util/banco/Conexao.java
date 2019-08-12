@@ -14,8 +14,6 @@ import java.util.logging.Logger;
 public class Conexao {
     
     private final String driver = "com.mysql.jdbc.Driver";
-    //private final String url = "jdbc:mysql://10.28.15.53/keywords";
-//    private final String url = "jdbc:mysql://rogerio-pc/comentarios";
     private final String url = "jdbc:mysql://localhost/comentarios";
     private final String login = "root";
     private final String pass = "root";

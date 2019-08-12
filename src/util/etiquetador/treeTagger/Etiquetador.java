@@ -20,16 +20,24 @@ public class Etiquetador {
 
     public Etiquetador(List<String> palavras) {
         Etiquetador.lemma.clear();
+        System.setProperty("treetagger.home", "TreeTagger");
+        this.tt = new TreeTaggerWrapper<String>();
+        try {
+            this.tt.setModel("TreeTagger/lib/pt.par:UTF8");
+        } catch (IOException e) {
+            System.out.println("Model não encontrado");
+        }
+        
         this.palavras = palavras;
     }
 
     public void etiquetar() {
-        System.setProperty("treetagger.home", "./TreeTagger");
+        //System.setProperty("treetagger.home", "TreeTagger");
 
-        tt = new TreeTaggerWrapper<String>();
+        //tt = new TreeTaggerWrapper<String>();
         try {
-            tt.setModel("./TreeTagger/lib/pt.par:UTF8");
-            tt.setHandler(new TokenHandler<String>() {
+            //tt.setModel("TreeTagger/lib/pt.par:UTF8");
+            this.tt.setHandler(new TokenHandler<String>() {
                 @Override
                 public void token(String token, String pos, String lemma) {
                     if (token.equals("_")) {
@@ -46,14 +54,14 @@ public class Etiquetador {
                     Etiquetador.lemma.put(token, lemma);
                 }
             });
-            tt.process(palavras);
+            this.tt.process(palavras);
         } catch (IOException e) {
             // TODO: handle exception
             System.out.println("Model não encontrado");
         } catch (TreeTaggerException t) {
             //System.out.println(t.getMessage());
         } finally {
-            tt.destroy();
+            this.tt.destroy();
         }
     }
     
