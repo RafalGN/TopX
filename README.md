@@ -1,5 +1,6 @@
 # Projeto TOPX
 
+* [Download do jar e suas dependências](https://www.dropbox.com/s/5jlz4asb49swuwz/TopX.zip?dl=0)
 * O arquivo de entrada tem a seguinte estrutura:
     * 2 colunas: *Texto_do_review [tab] Quantidade_de_Posts_do_Autor_do_Review*;
     * Um Review por linha.
