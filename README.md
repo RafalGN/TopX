@@ -1,7 +1,7 @@
 # Projeto TOPX
 
 * O arquivo de entrada tem a seguinte estrutura:
-    * 2 colunas: "Texto [tab] Quantidade de Posts do Autor do Review";
+    * 2 colunas: *Texto [tab] Quantidade de Posts do Autor do Review*;
     * Um review por linha.
 
 * Modo de execução com o Jar:
