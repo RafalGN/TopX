@@ -22,7 +22,7 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Token;
 import util.banco.GravaCorpusBuscape;
 import util.banco.GravaReviews;
-import util.banco.GravaSentiLex;
+import util.banco.HandleSentiLex;
 import util.etiquetador.treeTagger.Etiquetador;
 import util.preprocessamentos.LemmaTexto;
 
@@ -37,7 +37,7 @@ public class DetectaPolaridade {
     private final HashMap<String, Double> modificadores;
 
     public DetectaPolaridade() {
-        this.lexico = GravaSentiLex.selectLexico();
+        this.lexico = HandleSentiLex.selectLexico();
         System.out.println("Lexico Carregado");
         this.lemmatizador = new LemmaTexto();
         this.modificadores = carregaModificadores();
@@ -46,7 +46,7 @@ public class DetectaPolaridade {
 //    public static void main(String[] args) {
 //
 //        /* Carregar Sentilex */
-//        Map<String, Integer> lexico = GravaSentiLex.selectLexico();
+//        Map<String, Integer> lexico = HandleSentiLex.selectLexico();
 //
 ////        executaAvalEspec(lexico);
 //    }

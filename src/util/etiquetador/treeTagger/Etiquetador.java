@@ -25,7 +25,8 @@ public class Etiquetador {
         try {
             this.tt.setModel("TreeTagger/lib/pt.par:UTF8");
         } catch (IOException e) {
-            System.out.println("Model não encontrado");
+            e.printStackTrace();
+            System.out.println("MModel não encontrado");
         }
         
         this.palavras = palavras;
@@ -56,8 +57,8 @@ public class Etiquetador {
             });
             this.tt.process(palavras);
         } catch (IOException e) {
-            // TODO: handle exception
-            System.out.println("Model não encontrado");
+            e.printStackTrace();
+            System.out.println("O executável referente ao TreeTagger [Treetagger/bin/treetagger] deve ter permissões de execução. (chmod +x treetagger)");
         } catch (TreeTaggerException t) {
             //System.out.println(t.getMessage());
         } finally {

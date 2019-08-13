@@ -13,7 +13,7 @@ import net.sourceforge.jFuzzyLogic.plot.JFuzzyChart;
 
 public class CalculaImportancia {
 
-    public Map<Double,String> executa(InputFuzzy input, boolean chart) throws Exception {
+    public Map<Double,String> executa(InputFuzzy input, boolean chart){
         String aval = "";
         String filename = "fcl/sentimentParesCompleto2_2_1_ingles.fcl";
         int cont = 0;
@@ -42,13 +42,14 @@ public class CalculaImportancia {
         if (chart) {
             JFuzzyChart.get().chart(fis);
         }
-
-        // Print ruleSet
-        if (fb.getVariable("importance").getValue() >= 0 && fb.getVariable("importance").getValue() <= 4) {
+        
+        
+        // Exatamente como no arquivo FCL.
+        if (fb.getVariable("importance").getValue() >= 0 && fb.getVariable("importance").getValue() <= 2) {
             aval = "IF";
-        } else if (fb.getVariable("importance").getValue() > 4 && fb.getVariable("importance").getValue() <= 6) {
+        } else if (fb.getVariable("importance").getValue() > 2 && fb.getVariable("importance").getValue() <= 5) {
             aval = "SF";
-        } else if (fb.getVariable("importance").getValue() > 6 && fb.getVariable("importance").getValue() <= 8) {
+        } else if (fb.getVariable("importance").getValue() > 5 && fb.getVariable("importance").getValue() <= 7) {
             aval = "BM";
         } else {
             aval = "PL";

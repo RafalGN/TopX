@@ -11,8 +11,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import util.banco.GravaReviews;
-import util.banco.GravaSentiLex;
+import util.banco.HandleSentiLex;
 import util.preprocessamentos.LemmaTexto;
 
 /**
@@ -25,112 +27,22 @@ public class ExtracaoFinalVarPadroes {
     private final LemmaTexto lemmatizador;
 
     public ExtracaoFinalVarPadroes() {
-        this.lexico = GravaSentiLex.selectLexico();
+        this.lexico = HandleSentiLex.selectLexico();
         this.lemmatizador = new LemmaTexto();
     }
 
-    public static void main(String args[]) throws FileNotFoundException {
-//        Map<Integer, List<String>> mapPares = GravaReviews.selectPares();
-//        Map<Integer, List<String>> mapPadroes = GravaReviews.selectPadroesNew();
-//        List<String> features = carregaFeatures();
-//
-//        for (int i = 1; i <= 2000; i++) {
-//            int total = 0;
-//            i = 22;
-//            //Primeiros pares
-//            if (mapPares.containsKey(i)) {
-//                total = mapPares.get(i).size();
-//                for (String carac : mapPares.get(i)) {
-//                    boolean found = false;
-//                    for (String feature : features) {
-//                        if (carac.indexOf(feature) != -1) {
-//                            found = true;
-//                            break;
-//                        }
-//                    }
-//                    if (!found) {
-//                        total--;
-//                    }
-//                }
-////                System.out.println(i + "\t" + total);
-//            }
-//
-//            //Padroes serão verificados agora
-//            if (mapPadroes.containsKey(i)) {
-//                total = total + mapPadroes.get(i).size();
-//                for (String carac : mapPadroes.get(i)) {
-//                    boolean found = false;
-//                    for (String feature : features) {
-//                        if (carac.indexOf(feature) != -1) {
-//                            found = true;
-//                            break;
-//                        }
-//                    }
-//                    if (!found) {
-//                        total--;
-//                    }
-//                }
-//            }
-//
-//            System.out.println(i + "\t" + total);
-//        }
-    }
-
     /**
      * Contar a quantidade de padrões válidos para cada lista de acordo com as
      * features passadas por parâmetro
      *
      * @param pares
+     * @param hashPares
      * @param padroes
+     * @param hashPadroes
      * @param features
      * @return
      */
-    public int contagemPadroes(List<String> pares, List<String> padroes, List<String> features) {
-
-        int total = 0;
-        //Primeiros pares
-        total = pares.size();
-        for (String carac : pares) {
-            boolean found = false;
-            for (String feature : features) {
-                if (carac.indexOf(feature) != -1) {
-                    found = true;
-                    break;
-                }
-            }
-            if (!found) {
-                total--;
-            }
-        }
-
-        //Padroes serão verificados agora
-        total = total + padroes.size();
-        for (String carac : padroes) {
-            boolean found = false;
-            for (String feature : features) {
-                if (carac.indexOf(feature) != -1) {
-                    found = true;
-                    break;
-                }
-            }
-            if (!found) {
-                total--;
-            }
-        }
-
-        return total;
-    }
-
-    /**
-     * Contar a quantidade de padrões válidos para cada lista de acordo com as
-     * features passadas por parâmetro
-     *
-     * @param pares
-     * @param padroes
-     * @param features
-     * @return
-     */
-    public List<String> contagemPadroesNovo(List<String> pares, HashMap<String, String> hashPares, List<String> padroes, HashMap<String, String> hashPadroes, List<String> features) {
+    public List<String> contagemPadroes(List<String> pares, HashMap<String, String> hashPares, List<String> padroes, HashMap<String, String> hashPadroes, List<String> features) {
         List<String> retorno = new ArrayList<>();
         int total = 0;
         //Primeiros pares
@@ -185,10 +97,15 @@ public class ExtracaoFinalVarPadroes {
 
     /**
      *
-     * @return @throws FileNotFoundException
+     * @return 
      */
-    public static List<String> carregaFeatures() throws FileNotFoundException {
-        Scanner sc = new Scanner(new File("características.txt"));
+    public static List<String> carregaFeatures(){
+        Scanner sc = null;
+        try {
+            sc = new Scanner(new File("recursos/características.txt"));
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(ExtracaoFinalVarPadroes.class.getName()).log(Level.SEVERE, null, ex);
+        }
         List<String> lista = new ArrayList<>();
         while (sc.hasNextLine()) {
             lista.add(sc.nextLine());

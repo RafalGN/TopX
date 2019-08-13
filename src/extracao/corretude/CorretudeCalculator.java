@@ -33,7 +33,7 @@ public class CorretudeCalculator {
     Set<String> dictionary;
     
     public CorretudeCalculator() {
-         this.dictionary = new HashSet<String>();
+         this.dictionary = new HashSet<>();
         // read in dictionary of words
         Scanner sc = null;
         try {
@@ -51,7 +51,7 @@ public class CorretudeCalculator {
     }
 
     
-    public float calculaCorretude(String texto) throws FileNotFoundException{
+    public float calculaCorretude(String texto){
 
         ANTLRInputStream input = new ANTLRInputStream(texto.toLowerCase());
 
@@ -75,7 +75,7 @@ public class CorretudeCalculator {
             }
             return (corretos / allTokens.size()) * 100;
         } catch (NullPointerException npe) {
-//            npe.printStackTrace();
+            System.out.println("NullPointerException on Corretude Calculator");
         }
         
         return 0;
